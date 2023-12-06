@@ -1,7 +1,7 @@
 # Check if the private key file path is provided as an argument
 if ($args.Count -eq 0) {
     Write-Host "Please provide the path to the private key file as an argument."
-    exit 1
+    return
 }
 
 Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*'
