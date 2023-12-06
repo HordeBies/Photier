@@ -1,8 +1,9 @@
-# Check if the private key file path is provided as an argument
-if ($args.Count -eq 0) {
-    Write-Host "Please provide the path to the private key file as an argument."
-    return
+# Check if the private key file path is provided as an environment variable
+if (-not $env:SSH_PRIVATE_KEY_PATH) {
+    Write-Host "Please set the environment variable SSH_PRIVATE_KEY_PATH with the path to the private key file."
+    return  # Use 'return' to exit without closing the terminal
 }
+
 
 Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*'
 
@@ -20,7 +21,7 @@ Start-Service ssh-agent
 Get-Service ssh-agent
 
 # Read the private key from the file
-$privateKeyPath = $args[0]
+$privateKeyPath = $env:SSH_PRIVATE_KEY_PATH
 $privateKey = Get-Content -Raw $privateKeyPath
 
 # Specify the destination directory for the private key
@@ -36,5 +37,7 @@ if (-not (Test-Path $sshDirectory -PathType Container)) {
 Set-Content -Path $idEd25519Path -Value $privateKey -Force
 
 ssh-add $idEd25519Path
+
+Remove-Item -Path Env:\SSH_PRIVATE_KEY_PATH
 
 Write-Host "Private key added to ssh-agent successfully."
