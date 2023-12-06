@@ -4,7 +4,6 @@ if (-not $env:SSH_PRIVATE_KEY_PATH) {
     return  # Use 'return' to exit without closing the terminal
 }
 
-
 Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*'
 
 # Install the OpenSSH Client
@@ -36,8 +35,8 @@ if (-not (Test-Path $sshDirectory -PathType Container)) {
 # Copy the private key file to the destination
 Set-Content -Path $idEd25519Path -Value $privateKey -Force
 
+# Add the private key path to ssh
 ssh-add $idEd25519Path
 
+# Remove the env variable SSH_PRIVATE_KEY_PATH (artifact)
 Remove-Item -Path Env:\SSH_PRIVATE_KEY_PATH
-
-Write-Host "Private key added to ssh-agent successfully."
