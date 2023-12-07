@@ -17,6 +17,9 @@ if (!(Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -ErrorAction SilentlyCon
     Write-Output "Firewall rule 'OpenSSH-Server-In-TCP' has been created and exists."
 }
 
+# Configure PowerShell as default shell
+New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -PropertyType String -Force
+
 # Setup key based authentication
 $authorizedKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINrnRlRWlYJAjFEoIi2iG8eMDW9m9jUUrjyKst4WPj+g azureuser@DESKTOP-0UBG7UO"
 Set-Content -Force -Path $env:ProgramData\ssh\administrators_authorized_keys -Value $authorizedKey ;icacls.exe ""$env:ProgramData\ssh\administrators_authorized_keys"" /inheritance:r /grant ""Administrators:F"" /grant ""SYSTEM:F""
