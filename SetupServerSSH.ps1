@@ -24,6 +24,10 @@ New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Wi
 $authorizedKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINrnRlRWlYJAjFEoIi2iG8eMDW9m9jUUrjyKst4WPj+g azureuser@DESKTOP-0UBG7UO"
 Set-Content -Force -Path $env:ProgramData\ssh\administrators_authorized_keys -Value $authorizedKey ;icacls.exe ""$env:ProgramData\ssh\administrators_authorized_keys"" /inheritance:r /grant ""Administrators:F"" /grant ""SYSTEM:F""
 
+# Restart SSH service to apply config changes
+net stop sshd
+net start sshd
+
 # Install WinGet
 Invoke-WebRequest -Uri https://github.com/microsoft/winget-cli/releases/download/v1.6.3133/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -OutFile Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
 Invoke-WebRequest -Uri https://github.com/microsoft/winget-cli/releases/download/v1.6.3133/b6e881d14bc943268a82d474bf7d15af_License1.xml -OutFile b6e881d14bc943268a82d474bf7d15af_License1.xml
