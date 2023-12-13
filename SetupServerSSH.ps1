@@ -37,7 +37,7 @@ $wc.DownloadFile("https://github.com/microsoft/winget-cli/releases/download/v1.6
 
 Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
 Add-AppxPackage Microsoft.UI.Xaml.2.7.x64.appx
-Add-AppxProvisionedPackage -Online -PackagePath Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -LicensePath 65f132d72c1d44518a19d1a9c3de8e1f_License1.xml
+Add-AppxProvisionedPackage -Online -PackagePath Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -LicensePath 65f132d72c1d44518a19d1a9c3de8e1f_License1.xml -Verbose
 Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe
 
 winget list --accept-source-agreements
