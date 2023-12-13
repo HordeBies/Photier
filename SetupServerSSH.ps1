@@ -31,12 +31,12 @@ net start sshd
 # Install WinGet
 (New-Object System.Net.WebClient).DownloadFile("https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx", (Join-Path -Path (Get-Location) -ChildPath "Microsoft.VCLibs.x64.14.00.Desktop.appx"))
 (New-Object System.Net.WebClient).DownloadFile("https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx", (Join-Path -Path (Get-Location) -ChildPath "Microsoft.UI.Xaml.2.7.x64.appx"))
-(New-Object System.Net.WebClient).DownloadFile("https://github.com/microsoft/winget-cli/releases/download/v1.6.3421/65f132d72c1d44518a19d1a9c3de8e1f_License1.xml", (Join-Path -Path (Get-Location) -ChildPath "b6e881d14bc943268a82d474bf7d15af_License1.xml"))
+(New-Object System.Net.WebClient).DownloadFile("https://github.com/microsoft/winget-cli/releases/download/v1.6.3421/65f132d72c1d44518a19d1a9c3de8e1f_License1.xml", (Join-Path -Path (Get-Location) -ChildPath "License.xml"))
 (New-Object System.Net.WebClient).DownloadFile("https://github.com/microsoft/winget-cli/releases/download/v1.6.3421/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle", (Join-Path -Path (Get-Location) -ChildPath "Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"))
 
 Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
 Add-AppxPackage Microsoft.UI.Xaml.2.7.x64.appx
-Add-AppxProvisionedPackage -Online -PackagePath Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -LicensePath b6e881d14bc943268a82d474bf7d15af_License1.xml
+Add-AppxProvisionedPackage -Online -PackagePath Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -LicensePath License.xml
 Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe
 
 winget list --accept-source-agreements
