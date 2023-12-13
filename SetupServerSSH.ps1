@@ -29,6 +29,7 @@ net stop sshd
 net start sshd
 
 # Install WinGet
+#test
 # Download dependencies
 $AppxDependencies = @(
     @{
