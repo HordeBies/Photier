@@ -37,7 +37,7 @@ Start-Sleep -Seconds 1.5
 Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
 Add-AppxPackage Microsoft.UI.Xaml.2.7.x64.appx
 Add-AppPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
-Add-AppxProvisionedPackage -Online -PackagePath .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -LicensePath .\65f132d72c1d44518a19d1a9c3de8e1f_License1.xml -Verbose
+Add-AppxProvisionedPackage -Online -PackagePath .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -LicensePath .\65f132d72c1d44518a19d1a9c3de8e1f_License1.xml
 
 # Accept WinGet source agreements
 winget list --accept-source-agreements
