@@ -29,73 +29,9 @@ net stop sshd
 net start sshd
 
 # Install WinGet
-#test
-# Download dependencies
-$AppxDependencies = @(
-    @{
-        ShortName     = 'vclibs'
-        QualifiedName = 'Microsoft.VCLibs.140.00_8wekyb3d8bbwe'
-    },
-    @{
-        ShortName     = 'vclibsuwp'
-        QualifiedName = 'Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe'
-    }
-)
-ForEach ($Dependency in $AppxDependencies) {
-    $InvokeWebRequestSplat = @{
-        Uri             = 'https://store.rg-adguard.net/api/GetFiles'
-        Method          = 'POST'
-        ContentType     = 'application/x-www-form-urlencoded'
-        Body            = "type=PackageFamilyName&url=$($Dependency.QualifiedName)&ring=RP&lang=en-US"
-        UseBasicParsing = $True
-    }
-    $InvokeWebRequestSplat = @{
-        Uri     = ((Invoke-WebRequest @InvokeWebRequestSplat).Links | Where-Object {$_.OuterHTML -match '.appx' -and $_.outerHTML -match 'x64'}).href
-        OutFile = "$env:temp/$($Dependency.ShortName).appx"
-    }
-    Invoke-WebRequest @InvokeWebRequestSplat
-}
-# Download latest release (along with license) from github
-$InvokeRestMethodSplat = @{
-    Uri    = "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
-    Method = 'GET'
-}
-$LatestRelease = Invoke-RestMethod @InvokeRestMethodSplat
-$InvokeWebRequestSplat = @{
-    Uri     = ($LatestRelease.assets | Where-Object {$_.name -like '*.msixbundle'}).browser_download_url
-    OutFile = "$env:temp\winget.msixbundle"
-}
-Invoke-WebRequest @InvokeWebRequestSplat
-$InvokeWebRequestSplat = @{
-    Uri     = ($LatestRelease.assets | Where-Object {$_.name -like '*license*.xml'}).browser_download_url
-    OutFile = "$env:temp\wingetlicense.xml"
-}
-Invoke-WebRequest @InvokeWebRequestSplat
-
-# Install dependencies
-$AppxDependencies.ShortName | ForEach-Object {
-    $AddAppxPackageSplat = @{
-        Path = "$env:temp/$($_).appx"
-    }
-    Add-AppxPackage @AddAppxPackageSplat
-}
-# Install winget
-$AddAppxProvisionedPackageSplat = @{
-    Online = $True
-    PackagePath = "$env:temp\winget.msixbundle"
-    LicensePath = "$env:temp\wingetlicense.xml"
-}
-Add-AppxProvisionedPackage @AddAppxProvisionedPackageSplat
-
-# Create reparse point
-$SetExecutionAliasSplat = @{
-    Path        = "$([System.Environment]::SystemDirectory)\winget.exe"
-    PackageName = "Microsoft.DesktopAppInstaller_8wekyb3d8bbwe"
-    EntryPoint  = "Microsoft.DesktopAppInstaller_8wekyb3d8bbwe!winget"
-    Target      = "$((Get-AppxPackage Microsoft.DesktopAppInstaller).InstallLocation)\AppInstallerCLI.exe"
-    AppType     = 'Desktop'
-    Version     = 3
-}
-Set-ExecutionAlias @SetExecutionAliasSplat
-& explorer.exe "shell:appsFolder\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe!winget"
-winget list --accept-source-agreements
+Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+Invoke-WebRequest -Uri https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx -OutFile Microsoft.VCLibs.x64.14.00.Desktop.appx
+Invoke-WebRequest -Uri https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx -OutFile Microsoft.UI.Xaml.2.7.x64.appx
+Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
+Add-AppxPackage Microsoft.UI.Xaml.2.7.x64.appx
+Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
