@@ -29,12 +29,6 @@ net stop sshd
 net start sshd
 
 # Install WinGet
-#Requires -Modules 'NtObjectManager'
-[CmdletBinding()]
-Param(
-    # None
-)
-
 # Download dependencies
 $AppxDependencies = @(
     @{
