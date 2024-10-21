@@ -1,3 +1,22 @@
+# Check if the public key argument is provided
+param (
+    [string]$pubkey
+)
+
+if (-not $pubkey) {
+    Write-Host "Usage: ./script.ps1 <pubkey path/value>"
+    exit
+}
+
+# Determine if the provided argument is a file path or a string
+if (Test-Path $pubkey) {
+    # If it's a valid file path, read the public key from the file
+    $authorizedKey = Get-Content -Path $pubkey -Raw
+} else {
+    # Otherwise, treat it as a public key string
+    $authorizedKey = $pubkey
+}
+
 Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*'
 
 # Install the OpenSSH Server
@@ -21,7 +40,6 @@ if (!(Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -ErrorAction SilentlyCon
 New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -PropertyType String -Force
 
 # Setup key based authentication
-$authorizedKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINrnRlRWlYJAjFEoIi2iG8eMDW9m9jUUrjyKst4WPj+g azureuser@DESKTOP-0UBG7UO"
 Set-Content -Force -Path $env:ProgramData\ssh\administrators_authorized_keys -Value $authorizedKey ;icacls.exe ""$env:ProgramData\ssh\administrators_authorized_keys"" /inheritance:r /grant ""Administrators:F"" /grant ""SYSTEM:F""
 
 # Restart SSH service to apply config changes
